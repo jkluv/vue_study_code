@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./lib/vue.js"></script>
+</head>
+<style>
+    .div1{
+        width: 100%;
+        height: 200px;
+        background:gray;
+    }
+</style>
+<body>
+    <div id="app">
+        <!-- .stop   阻止冒泡 -->
+        <!-- <div class="div1" @click="div1Button">
+            <input type="button" value="点我" @click.stop="btnButton">
+        </div> -->
+        <!-- .prevent   阻止默认事件 -->
+        <!-- <a href="http://www.baidu.com" @click.prevent="linkTo">去百度</a> -->
+        <!-- .capture实现捕获触发事件 -->
+        <!-- <div class="div1" @click.capture="div1Button">
+            <input type="button" value="点我" @click.stop="btnButton">
+        </div> -->
+        <!-- .self   只有点击自身时，才会触发事件 -->
+        <!-- <div class="div1" @click.self="div1Button">
+            <input type="button" value="点我" @click.stop="btnButton">
+        </div> -->
+        <!-- .once   只触发一次 -->
+        <a href="http://www.baidu.com" @click.prevent.once="linkTo">去百度</a>
+        <!-- .self和.stop区别
+            .self只管自己，不管别人
+        -->
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            methods: {
+                div1Button(){
+                    alert('点了div1')
+                },
+                btnButton(){
+                    alert('点了button')
+                },
+                linkTo(){
+                    alert('去百度')
+                }
+            },
+        })
+        </script>
+</body>
+</html>

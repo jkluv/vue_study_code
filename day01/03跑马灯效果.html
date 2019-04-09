@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="动起来" @click="start">
+        <input type="button" value="stop" @click="pause">
+        <br>
+        <h2>{{msg}}</h2>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data: {
+                msg:'猥琐发育，别浪！！！',
+                intervalId:null//在data上定义定时器id
+            },
+            methods: {
+                start(){
+                    //开始
+                    if(this.intervalId != null) return;
+                    this.intervalId = setInterval(() => {
+                        //截取第一个字符
+                    var start = this.msg.substring(0,1)
+                    //从第一个字符开始截取
+                    var end = this.msg.substring(1)
+                    //第一个放在最后面
+                    this.msg = end + start
+                    }, 400);
+                    /*
+                    //开始
+                    //var _this = this
+                    _this.intervalId = setInterval(function(){
+                    //截取第一个字符
+                    var start = _this.msg.substring(0,1)
+                    //从第一个字符开始截取
+                    var end = _this.msg.substring(1)
+                    //第一个放在最后面
+                    _this.msg = end + start
+                    },400);
+                    */
+                },
+                pause(){
+                    //停止
+                    clearInterval(this.intervalId)
+                    this.msg = '猥琐发育，别浪！！！'
+                    this.intervalId = null
+                }
+            },
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p id="p">
+            <input type="button" value="修改" @click="msg='no'">
+            {{msg}}
+        </p>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data: {
+                msg:'ok'
+            },
+            methods: {
+                show(){
+                    console.log('执行了show方法')
+                }
+            },
+
+            //遇到的第一个生命周期函数，表示实例完全被创建出来之前，会执行它
+            beforeCreate() {//在beforeCreate 生命周期函数执行的时候，data 和 methods 中的数据还没有被初始化
+                console.log('beforeCreate')
+            },
+            //遇到的第二个生命周期函数
+            created() {//如果要操作data中的数据或者调用method中的方法，最早只能在created中操作
+                this.show()
+                console.log(this.msg)
+            },
+            //遇到的第三个生命周期函数，表示，模板已经在内存中编辑完成了，但尚未把模板渲染到页面中
+            beforeMount() {//在beforeMount 执行的时候，页面中的元素还没有被真正的替换过来，只是之前写的一些模板字符串
+                console.log(document.getElementById('p').innerText)
+            },
+            //遇到的第四个生命周期函数，表示，内存中的模板，已经真实的挂载到页面中了，用户可以真实的看到页面
+            mounted() {//注意：mounted 是实例中创建的最后一个生命周期函数，当执行完 mounted 就表示，实例已经完全被创建好了，
+                        //此时，如果没有其他操作的话，这个实例就静悄悄的，躺在我们内存中，一动不动。
+                console.log(document.getElementById('p').innerText)
+            },
+            beforeUpdate() {//当执行beforeUpdate 时，页面中显示的数据还是旧的，此时data中的数据是最新的，页面尚未和data中最新的数据保持同步
+                console.log('页面中msg中的数据'+document.getElementById('p').innerText)
+                console.log('此时data中msg的数据为：'+this.msg)
+            },
+            updated() {//updated 执行的时候，页面和data中的数据已经保持同步了，都是最新的
+                console.log('页面中msg中的数据'+document.getElementById('p').innerText)
+                console.log('此时data中msg的数据为：'+this.msg)
+            },
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!-- 
+    来了 api 要用趁早哦
+
+用到的api
+
+- get 请求获取所有品牌列表的 api
+
+http://kerys.pythonanywhere.com/api/getprodlist/
+
+调用方式: GET 请求直接调用
+
+- post 请求添加品牌的 api
+
+http://kerys.pythonanywhere.com/api/addprod/
+
+调用方式:POST 请求 需要的参数 {name: '品牌名称'} , {emulateJSON:true} 普通表单请求
+
+- get 请求删除品牌的 api
+
+http://kerys.pythonanywhere.com/api/delprod/id
+
+调用方式: GET 请求 id 是品牌的id int类型
+ -->
+
+ <!DOCTYPE html>
+ <html>
+ <head>
+     <meta charset="utf-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <title>Page Title</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <script src="./lib/vue.js"></script>
+     <script src="./lib/vue-resource.js"></script>
+     <link rel="stylesheet" href="./lib/bootstrap.css">
+ </head>
+ <body>
+     <div id="app">
+         <div class="panel panel-primary">
+             <div class="panel-heading">
+                 <h3 class="panel-title">添加品牌</h3>
+             </div>
+             <div class="panel-body form-inline">
+                 <label>
+                     Name:
+                     <input type="text" class="form-control" v-model="name" @keyup.enter="add">
+                 </label>
+                 <label>
+                     <input type="button" value="添加" class="btn tn-primary" @click="add">
+                 </label>
+                 <label>
+                     搜索名称关键字：
+                     <input type="text" class="form-control" v-model="keyWords" v-focus v-color="'blue'">
+                 </label>
+             </div>
+         </div>
+         <table class="table table-bordered table-hover table-striped">
+             <thead>
+                 <tr>
+                     <th>Id</th>
+                     <th>Name</th>
+                     <th>Ctime</th>
+                     <th>Operation</th>
+                 </tr>
+             </thead>
+             <tbody>
+                 <tr v-for="item in list" :key="item.id">
+                     <td>{{item.id}}</td>
+                     <td v-text="item.name"></td>
+                     <td>{{item.ctime}}</td>
+                     <!-- .prevent  阻止默认行为，防止页面刷新 -->
+                     <td><a href="" @click.prevent="del(item.id)">删除</a></td>
+                 </tr>
+             </tbody>
+         </table>
+     </div>
+     <script>
+         //如果我们通过全局配置了 ，请求的数据接口 根域名 ，则 在每次单独发起http 请求的时候，请求的url 路径，
+         //应以相对路径开头， 前面不能带 / ，否则 不会启用根路径做拼接
+         Vue.http.options.root = 'http://kerys.pythonanywhere.com/'
+         //全局启用 emulateJSON 渲染
+         Vue.http.options.emulateJSON = true
+         var vm = new Vue({
+             el:'#app',
+             data: {
+                 name:'',
+                 keyWords:'',
+                 list:[
+                     {
+                         id:1,
+                         name:'宝马',
+                         ctime:new Date(),
+                     },
+                     {
+                         id:2,
+                         name:'奔驰',
+                         ctime:new Date(),
+                     }
+                 ]
+             },
+             methods: {
+                 add(){//添加品牌到后台
+                    //  this.$http.post('api/addprod/',{name:this.name,ctime:new Date()},{emulateJSON:true})
+                    //  .then(result => {
+                    //      if(result.body.status === 'success'){
+                    //          //添加成功，调用getAllList
+                    //          this.getAllList()
+                    //          this.name = ''
+                    //      }else{
+                    //          alert('添加失败')
+                    //      }
+                    //  })
+                     this.$http.post('api/addprod/',{name:this.name,ctime:new Date()})
+                     .then(result => {
+                         if(result.body.status === 'success'){
+                             //添加成功，调用getAllList
+                             this.getAllList()
+                             this.name = ''
+                         }else{
+                             alert('添加失败')
+                         }
+                     })
+                 },
+                 del(id){//根据id删除
+                    this.$http.get('api/delprod/'+id).then(result => {
+                        if(result.body.status === 'success'){
+                            this.getAllList()
+                        }else(
+                            alert('删除失败')
+                        )
+                    })
+                 },
+                 search(){
+                 },
+                 getAllList(){//获取所有品牌列表
+                     this.$http.get('api/getprodlist/').then(result => {
+                         var result = result.data
+                         if(result.status === 'success'){
+                             this.list = result.message
+                         }else{
+                             alert('获取数据失败')
+                         }
+                     })
+                 }
+             },
+             created() {
+                 this.getAllList()
+             },
+         })
+     </script>
+ </body>
+ </html>

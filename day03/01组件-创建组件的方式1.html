@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./lib/vue.js"></script>
+
+</head>
+<body>
+    <div id="app">
+        <!-- 使用组件，把组件的名称按照HTML标签的格式引入到页面中 -->
+        <!-- 以驼峰格式命名的组件名称时，驼峰的字母小写并以“-”连接-->
+        <my-com1></my-com1>
+        <my-com2></my-com2>
+    </div>
+    <script>
+        //1.1使用Vue.extend来创建全局的组件
+        var com1 = Vue.extend({
+            template:'<h3>这是一个h3标签</h3>'
+        });
+        //1.2使用Vue.component('组件名称',创建出来的组件模板对象)
+        Vue.component('myCom1',com1)
+        //2
+        Vue.component('myCom2',Vue.extend({
+            template:'<h3>这又是一个h3标签</h3>'
+        }))
+
+        //创建vue实例
+        var vm = new Vue({
+            el:'#app',
+        });
+    </script>
+</body>
+</html>
